@@ -1,0 +1,7 @@
+Uniform Interface --> Clearly defined API endpoints with clearly defined request + response data structure
+Stateless Interactions --> Server and client don't store any connection history, every request is handled seperately 
+
+Cacheable --> Servers may set caching headers to allow the client to cache responses
+Client-Server --> Server and client are separated, client is not concerned with persistent data storage
+Layered-system --> Server may forward request to other APIs
+Code on Demand --> Executable code may be transferred from server to client
