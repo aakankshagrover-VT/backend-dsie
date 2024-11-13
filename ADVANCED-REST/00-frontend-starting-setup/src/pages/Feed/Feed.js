@@ -50,7 +50,7 @@ class Feed extends Component {
       page--;
       this.setState({ postPage: page });
     }
-    fetch("URL")
+    fetch("http://localhost:8080/feed/posts?page=" + page)
       .then((res) => {
         if (res.status !== 200) {
           throw new Error("Failed to fetch posts.");
@@ -105,22 +105,21 @@ class Feed extends Component {
     this.setState({
       editLoading: true,
     });
+    const formData = new FormData();
+    formData.append("title", postData.title);
+    formData.append("content", postData.content);
+    formData.append("image", postData.image);
+    let method = "POST";
     // Set up data (with image!)
     let url = "http://localhost:8080/feed/post";
     if (this.state.editPost) {
-      url = "URL";
+      url = `http://localhost:8080/feed/post/${this.state.editPost._id}`;
+      method = "PUT";
     }
 
     fetch(url, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        title: postData.title,
-        content: postData.content,
-        imageUrl: postData.image,
-      }),
+      method,
+      body: formData,
     })
       .then((res) => {
         if (res.status !== 200 && res.status !== 201) {
@@ -171,7 +170,9 @@ class Feed extends Component {
 
   deletePostHandler = (postId) => {
     this.setState({ postsLoading: true });
-    fetch("URL")
+    fetch("http://localhost:8080/feed/post/" + postId, {
+      method: "DELETE",
+    })
       .then((res) => {
         if (res.status !== 200 && res.status !== 201) {
           throw new Error("Deleting a post failed!");
